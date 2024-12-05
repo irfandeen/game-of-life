@@ -107,7 +107,6 @@ class GameOfLife {
             @Override
             public void actionPerformed(ActionEvent e) {
                 simStatus = true;
-                System.out.println(simStatus);
             }
         });
         resetButton.addActionListener(new ActionListener() {
@@ -143,7 +142,7 @@ class GameOfLife {
                 int col = e.getX() / cellWidth;
 
                 if (!simStatus && isValidCoord(row, col)) {
-                    System.out.println("Mouse clicked at cell [" + row + "][" + col + "]");
+                    // System.out.println("Mouse clicked at cell [" + row + "][" + col + "]");
                     // Toggle the state of the clicked cell
                     if (!game[row][col]) {
                         gridDrawer.fillCell(row, col);
@@ -165,7 +164,7 @@ class GameOfLife {
         frame.setVisible(true);
 
         while (true) {
-            System.out.println(simStatus);
+            // System.out.println(simStatus);
             delay(1000);
             if (simStatus) {
                 nextGen();
