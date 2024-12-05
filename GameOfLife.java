@@ -1,6 +1,10 @@
+import javax.swing.*;
+import java.awt.*;
+
 class GameOfLife {
-    private static final int n = 20;
+    private static final int n = 30;
     private static boolean[][] game = new boolean[n][n];
+    private static GridDrawer gridDrawer = new GridDrawer(n);
 
     private static void printGrid() {
         System.out.print("\033[H\033[2J");
@@ -44,6 +48,9 @@ class GameOfLife {
                 else if (game[i][j] && count > 3) newBoard[i][j] = false;
                 else if (!game[i][j] && count == 3) newBoard[i][j] = true;
                 else if (game[i][j]) newBoard[i][j] = true;
+
+                if (newBoard[i][j]) gridDrawer.fillCell(i, j);
+                else gridDrawer.removeCell(i, j);
             }
         }
         
@@ -54,18 +61,35 @@ class GameOfLife {
     }
 
     public static void main(String[] args) {
-        // Initial conditions
-        game[9][10] = true;
-        game[10][11] = true;
-        for (int i = 9; i <= 11; i++)
-            game[11][i] = true;
+        JFrame frame = new JFrame("Game of Life");
+        JButton startSim = new JButton();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 600);
+        startSim.setSize(100, 100);
+        startSim.setVisible(true);
+        startSim.setText("Start Simulation");
 
-        // Simulate
-        final int simCount = 10;
-        System.out.print("\033[2J");
-        for (int i = 0; i < simCount; i++) {
-            printGrid();
+        frame.setLayout(new BoxLayout());
+        frame.add(gridDrawer);
+        frame.add(startSim);
+        frame.setVisible(true);        
+        
+        game[9][9] = true;
+        game[9][10] = true;
+        game[9][11] = true;
+        gridDrawer.fillCell(9, 10);
+        gridDrawer.fillCell(9, 11);
+        gridDrawer.fillCell(9, 9);
+        gridDrawer.repaint();
+
+        for (int i = 0; i < 10; i++) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             nextGen();
+            gridDrawer.repaint();
         }
     }
 };
