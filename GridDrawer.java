@@ -54,5 +54,9 @@ public class GridDrawer extends JPanel {
             filledCells.remove(cell);
         }
     }
+
+    public void clearGrid() {
+        filledCells.clear();
+    }
 }
 

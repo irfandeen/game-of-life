@@ -80,6 +80,10 @@ class GameOfLife {
     }
 
     private static void initState() {
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                game[i][j] = false;
+
         for(int i = 9; i <= 11; i++) {
             game[10][i] = true;
             gridDrawer.fillCell(10, i);
@@ -110,6 +114,7 @@ class GameOfLife {
             @Override
             public void actionPerformed(ActionEvent e) {
                 simStatus = false;
+                gridDrawer.clearGrid();
                 initState();
                 gridDrawer.repaint();
             }
@@ -125,6 +130,31 @@ class GameOfLife {
         buttonPanel.add(startButton);
         buttonPanel.add(resetButton);
         buttonPanel.add(stopButton);
+
+        gridDrawer.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Calculate cell dimensions
+                int cellWidth = gridDrawer.getWidth() / n;
+                int cellHeight = gridDrawer.getHeight() / n;
+
+                // Calculate the cell indices
+                int row = e.getY() / cellHeight;
+                int col = e.getX() / cellWidth;
+
+                if (!simStatus && isValidCoord(row, col)) {
+                    System.out.println("Mouse clicked at cell [" + row + "][" + col + "]");
+                    // Toggle the state of the clicked cell
+                    if (!game[row][col]) {
+                        gridDrawer.fillCell(row, col);
+                    } else {
+                        gridDrawer.removeCell(row, col);
+                    }
+                    game[row][col] = !game[row][col];
+                    gridDrawer.repaint();
+                }
+            }
+        });
 
         // Create a container panel with BorderLayout
         JPanel container = new JPanel(new BorderLayout());
